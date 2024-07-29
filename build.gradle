@@ -12,6 +12,13 @@ java {
         languageVersion = JavaLanguageVersion.of(18)
     }
 }
+jar {
+    enabled = true
+}
+
+bootJar {
+    enabled = true
+}
 
 configurations {
     compileOnly {

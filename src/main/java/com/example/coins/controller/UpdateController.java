@@ -21,24 +21,36 @@ public class UpdateController {
         return userRepository.findByTgId(tgId);
     }
 
-    @PatchMapping("/coins")
-    public ResponseEntity<HttpStatus> updateCoinsCount(@RequestParam long coins, @RequestParam long tgId) {
-        Optional<User> opUser = findUserByTgId(tgId);
+    @PatchMapping("/collect") // Returns amount of collected coins
+    public ResponseEntity<Long> collectFarmedCoins(@RequestParam long id) {
+        Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();
-            user.setCoins(user.getCoins() + coins);
-            if (user.getRefId() != 0) {
-                userRepository.findByTgId(user.getRefId()).ifPresent(firstRef -> {
-                    firstRef.setCoinsFromRefs(firstRef.getCoinsFromRefs() + Math.round(0.1 * coins));
-                    if (firstRef.getRefId() != 0) {
-                        userRepository.findByTgId(firstRef.getRefId()).ifPresent(secondRef ->
-                                secondRef.setCoinsFromRefs(secondRef.getCoinsFromRefs() + Math.round(0.025 * coins))
-                        );
-                    }
-                });
+            long coins = 0;
+            if ((int) Math.floor(100 * Math.random()) >= 95) { // Jackpot chance calculation
+                user.setCoins(user.getEarnedCoins() + 500);
+                coins = user.getEarnedCoins() + 500;
+            } else {
+                user.setCoins(user.getEarnedCoins());
+                coins = user.getEarnedCoins();
             }
             userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+            // Calculating bonuses for referrals
+            if (user.getRefId() != 0) {
+                Optional<User> ref1Opt = userRepository.findByTgId(user.getRefId());
+                if (ref1Opt.isPresent()) {
+                    User ref1 = ref1Opt.get();
+                    ref1.setCoinsFromRefs((long) Math.floor(coins * 0.1));
+                    userRepository.save(ref1);
+                    Optional<User> ref2Opt = userRepository.findByTgId(ref1.getRefId());
+                    if (ref2Opt.isPresent()) {
+                        User ref2 = ref2Opt.get();
+                        ref2.setCoinsFromRefs((long) Math.floor(coins * 0.025));
+                        userRepository.save(ref2);
+                    }
+                }
+            }
+            return new ResponseEntity<>(coins, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -56,13 +68,16 @@ public class UpdateController {
     }
 
     @PatchMapping("/farmStart")
-    public ResponseEntity<HttpStatus> updateFarmTime(@RequestParam long id) {
+    public ResponseEntity<Integer> updateFarmTime(@RequestParam long id) {
         Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();
             user.setLastFarmStart(LocalDateTime.now());
+            int coins = (int) Math.floor(30 * Math.random());
+            coins += 50; // Randomizing earned coins from 50 to 80
+            user.setEarnedCoins(coins);
             userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(coins, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

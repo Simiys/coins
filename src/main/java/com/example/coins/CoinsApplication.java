@@ -107,30 +107,39 @@ public class CoinsApplication implements CommandLineRunner {
             long userId = msg.getFrom().getId();
             String[] parts = msg.getText().split(" ");
             Integer referrerCandidate = null;
-            List<User> users = rep.findAll();
+
+            // Проверяем, существует ли пользователь с данным tgId
             if (rep.findByTgId(userId).isPresent()) {
                 return;
             }
+
             if (parts.length > 1) {
                 try {
                     referrerCandidate = Integer.parseInt(parts[1]);
+
+                    // Проверяем, что реферер не равен самому себе и существует в базе данных
                     if (userId != referrerCandidate && rep.findByTgId(referrerCandidate).isPresent()) {
                         User user = new User();
                         user.setTgId(userId);
                         user.setRefId(referrerCandidate);
+                        user.setName(msg.getFrom().getFirstName());
                         rep.save(user);
+                        System.out.println("User with referrer saved: " + userId);
                         return;
                     }
-                        User user = new User();
-                        user.setTgId(userId);
-                        user.setRefId(0);
-                        rep.save(user);
-
                 } catch (NumberFormatException e) {
-
+                    System.out.println("Invalid referrer ID: " + parts[1]);
                 }
             }
+
+            // Если нет реферера или реферер некорректен, сохраняем пользователя с refId = 0
+            User user = new User();
+            user.setTgId(userId);
+            user.setRefId(0);
+            user.setName(msg.getFrom().getFirstName());
+            rep.save(user);
         }
+
 
         private void sendMessage(long chatId, String text) {
             SendMessage message = new SendMessage();

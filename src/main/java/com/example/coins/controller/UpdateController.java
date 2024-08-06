@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-@RequestMapping("/api/update")
+@RequestMapping("/api")
 @RestController
 public class UpdateController {
 
@@ -26,14 +26,15 @@ public class UpdateController {
         Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();
-            long coins = 0;
+            long  coins = user.getEarnedCoins();
             if ((int) Math.floor(100 * Math.random()) >= 95) { // Jackpot chance calculation
-                user.setCoins(user.getEarnedCoins() + 500);
-                coins = user.getEarnedCoins() + 500;
+                user.setCoins(user.getCoins() + user.getEarnedCoins() + 500);
+                coins += 500;
             } else {
-                user.setCoins(user.getEarnedCoins());
-                coins = user.getEarnedCoins();
+                user.setCoins(user.getCoins() + user.getEarnedCoins());
+
             }
+            user.setLastFarmStart(null);
             userRepository.save(user);
             // Calculating bonuses for referrals
             if (user.getRefId() != 0) {
@@ -62,7 +63,7 @@ public class UpdateController {
             User user = opUser.get();
             user.setRefLinkStatus(true);
             userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK ,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -91,7 +92,7 @@ public class UpdateController {
             user.setCoinsFromRefs(0);
             user.setLastRefClaim(LocalDateTime.now());
             userRepository.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK,HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

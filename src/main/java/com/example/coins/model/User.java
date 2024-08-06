@@ -22,6 +22,9 @@ public class User {
     private long tgId;
 
     @Column
+    private String name;
+
+    @Column
     private long refId;
 
     @Column
@@ -53,8 +56,6 @@ public class User {
 
     @Column
     private LocalDateTime lastRefClaim;
-
-
 
     public User() {
 

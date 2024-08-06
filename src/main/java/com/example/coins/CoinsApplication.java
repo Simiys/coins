@@ -73,35 +73,42 @@ public class CoinsApplication implements CommandLineRunner {
 
                 if (messageText.startsWith("/start")) {
                     handleStartCommand(update.getMessage());
-                    sendWebAppMessage(chatId);
+//                    sendWebAppMessage(chatId);
                 } else {
                     sendMessage(chatId, "Received your message");
                 }
             }
         }
 
-        private void sendWebAppMessage(long chatId) {
-            SendMessage message = new SendMessage();
-            message.setChatId(String.valueOf(chatId));
-            message.setText("Открой Web-приложение");
-
-            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
-            List<KeyboardRow> keyboard = new ArrayList<>();
-            KeyboardRow row = new KeyboardRow();
-            KeyboardButton button = new KeyboardButton();
-            button.setText("Открыть Web-приложение");
-            button.setWebApp(new WebAppInfo(botConfig.getWebAppUrl()));
-            row.add(button);
-            keyboard.add(row);
-            keyboardMarkup.setKeyboard(keyboard);
-            message.setReplyMarkup(keyboardMarkup);
-
-            try {
-                execute(message);
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
-            }
-        }
+//        private void sendWebAppMessage(long chatId) {
+//            SendMessage message = new SendMessage();
+//            message.setChatId(String.valueOf(chatId));
+//            message.setText("Открой Web-приложение");
+//
+//
+//            ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
+//            List<KeyboardRow> keyboard = new ArrayList<>();
+//
+//
+//            KeyboardRow row = new KeyboardRow();
+//            KeyboardButton button = new KeyboardButton();
+//            button.setText("Открыть Web-приложение");
+//            button.setWebApp(new WebAppInfo(botConfig.getWebAppUrl()));
+//
+//
+//            row.add(0, button);
+//            keyboard.add(row);
+//
+//            keyboardMarkup.setKeyboard(keyboard);
+//            keyboardMarkup.setResizeKeyboard(true); // позволяет клавиатуре адаптироваться по размеру экрана
+//            message.setReplyMarkup(keyboardMarkup);
+//
+//            try {
+//                execute(message);
+//            } catch (TelegramApiException e) {
+//                e.printStackTrace();
+//            }
+//        }
 
         private void handleStartCommand(Message msg) {
             long userId = msg.getFrom().getId();

@@ -23,6 +23,7 @@ public class UpdateController {
 
     @PatchMapping("/collect") // Returns amount of collected coins
     public ResponseEntity<Long> collectFarmedCoins(@RequestParam long id) {
+        System.out.println("collect " + id);
         Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();
@@ -58,6 +59,7 @@ public class UpdateController {
 
     @PatchMapping("/reflink")
     public ResponseEntity<HttpStatus> updateReferralLinkStatus(@RequestParam long id) {
+        System.out.println("reflink " + id);
         Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();
@@ -70,6 +72,7 @@ public class UpdateController {
 
     @PatchMapping("/farmStart")
     public ResponseEntity<Integer> updateFarmTime(@RequestParam long id) {
+        System.out.println("farmStart " + id);
         Optional<User> opUser = findUserByTgId(id);
         if (opUser.isPresent()) {
             User user = opUser.get();

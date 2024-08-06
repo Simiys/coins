@@ -23,6 +23,7 @@ public class UserController {
 
     @GetMapping("/user")
     public ResponseEntity<UserForResponse> getUserById(@RequestParam long id) {
+        System.out.println("EBANA" + id);
         User user;
         Optional<User> opUser = userRepository.findByTgId(id);
         if(opUser.isPresent()) {

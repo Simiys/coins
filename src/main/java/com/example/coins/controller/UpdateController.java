@@ -53,7 +53,7 @@ public class UpdateController {
             }
             return new ResponseEntity<>(coins, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>((long) -100, HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/reflink")
@@ -65,7 +65,7 @@ public class UpdateController {
             userRepository.save(user);
             return new ResponseEntity<>(HttpStatus.OK ,HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND, HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/farmStart")
@@ -80,7 +80,7 @@ public class UpdateController {
             userRepository.save(user);
             return new ResponseEntity<>(coins, HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>((int) -100, HttpStatus.NOT_FOUND);
     }
 
     @PatchMapping("/claimRefCoins")
@@ -94,6 +94,6 @@ public class UpdateController {
             userRepository.save(user);
             return new ResponseEntity<>(HttpStatus.OK,HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND,HttpStatus.NOT_FOUND);
     }
 }

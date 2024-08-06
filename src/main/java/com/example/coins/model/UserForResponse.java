@@ -3,12 +3,14 @@ package com.example.coins.model;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class UserForResponse {
     private long tgId;
 

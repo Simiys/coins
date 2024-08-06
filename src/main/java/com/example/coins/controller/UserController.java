@@ -29,7 +29,7 @@ public class UserController {
             user = opUser.get();
             return new ResponseEntity<UserForResponse>(new UserForResponse(user), HttpStatusCode.valueOf(200));
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new UserForResponse(), HttpStatus.NOT_FOUND);
         }
     }
 
@@ -45,7 +45,7 @@ public class UserController {
             return new ResponseEntity<>(response, HttpStatus.OK);
 
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(new ArrayList<>(),HttpStatus.NOT_FOUND);
         }
     }
 

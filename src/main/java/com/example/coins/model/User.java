@@ -31,6 +31,9 @@ public class User {
     private long coins;
 
     @Column
+    private int refCount;
+
+    @Column
     private long tickets;
 
     @Column
@@ -61,14 +64,7 @@ public class User {
 
     }
 
-    public User(long tgId) {
-        this.tgId = id;
-        this.coins = 0;
-        this.coinsFromRefs = 0;
-        this.earnedCoins = 0;
-        this.refLinkStatus = false;
-        this.volumeLevel = 0;
-        this.timeLevel = 0;
-        this.speedLevel = 0;
+    public void incRefCount() {
+        this.refCount += 1;
     }
 }

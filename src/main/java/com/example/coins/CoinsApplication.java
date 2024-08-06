@@ -119,12 +119,18 @@ public class CoinsApplication implements CommandLineRunner {
 
                     // Проверяем, что реферер не равен самому себе и существует в базе данных
                     if (userId != referrerCandidate && rep.findByTgId(referrerCandidate).isPresent()) {
+                        User referer = rep.findByTgId(referrerCandidate).get();
                         User user = new User();
                         user.setTgId(userId);
-                        user.setRefId(referrerCandidate);
                         user.setName(msg.getFrom().getFirstName());
+                        if(referer.getRefCount() == 10) {
+                            user.setRefId(0);
+                        } else {
+                            user.setRefId(referrerCandidate);
+                            referer.incRefCount();
+                        }
+                        rep.save(referer);
                         rep.save(user);
-                        System.out.println("User with referrer saved: " + userId);
                         return;
                     }
                 } catch (NumberFormatException e) {

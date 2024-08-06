@@ -20,6 +20,8 @@ public class UserForResponse {
 
     private long coins;
 
+    private int refCount;
+
     private long tickets;
 
     private long coinsFromRefs;
@@ -41,6 +43,7 @@ public class UserForResponse {
 
     public UserForResponse (User user) {
         this.coins = user.getCoins();
+        this.refCount = user.getRefCount();
         this.tgId = user.getTgId();
         this.name = user.getName();
         this.refId = user.getRefId();

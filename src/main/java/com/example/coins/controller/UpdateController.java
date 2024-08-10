@@ -38,16 +38,16 @@ public class UpdateController {
             user.setLastFarmStart(null);
             userRepository.save(user);
             // Calculating bonuses for referrals
-            if (user.getRefId() != 0) {
+            f (user.getRefId() != 0) {
                 Optional<User> ref1Opt = userRepository.findByTgId(user.getRefId());
                 if (ref1Opt.isPresent()) {
                     User ref1 = ref1Opt.get();
-                    ref1.setCoinsFromRefs((long) Math.floor(coins * 0.1));
+                    ref1.setCoinsFromRefs((long) Math.floor(coins * 0.1) + ref1.getCoinsFromRefs());
                     userRepository.save(ref1);
                     Optional<User> ref2Opt = userRepository.findByTgId(ref1.getRefId());
                     if (ref2Opt.isPresent()) {
                         User ref2 = ref2Opt.get();
-                        ref2.setCoinsFromRefs((long) Math.floor(coins * 0.025));
+                        ref2.setCoinsFromRefs((long) Math.floor(coins * 0.025) + ref2.getCoinsFromRefs());
                         userRepository.save(ref2);
                     }
                 }
